@@ -10,6 +10,6 @@ public class comida {
     @GetMapping("/comida")
     public String showIndex(Model model) {
         model.addAttribute("title", "Comida");
-        return "index"; // Esto devuelve "index.html" en la carpeta templates
+        return "index";
     }
 }

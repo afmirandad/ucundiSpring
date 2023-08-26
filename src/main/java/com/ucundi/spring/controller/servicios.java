@@ -10,6 +10,6 @@ public class servicios {
     @GetMapping("/servicios")
     public String showIndex(Model model) {
         model.addAttribute("title", "Servicios");
-        return "index"; // Esto devuelve "index.html" en la carpeta templates
+        return "index";
     }
 }
