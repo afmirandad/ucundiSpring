@@ -27,7 +27,7 @@ This is a sample project built with Spring Boot, Thymeleaf, and Spring Security.
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/spring-boot-thymeleaf-security.git
+   git clone https://github.com/afmirandad/ucundiSpring.git
 
     Navigate to the project directory:
 
