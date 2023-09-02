@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -23,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/camas").permitAll()
                         .requestMatchers("/comida").permitAll()
                         .requestMatchers("/ropa").permitAll()
-                        .requestMatchers("/servicios").permitAll()
+                        .requestMatchers("/servicios","/juguetes").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(withDefaults());
@@ -33,14 +35,21 @@ public class SecurityConfig {
 
     // @formatter:off
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+        PasswordEncoder passwordEncoder = passwordEncoder();
+
+        UserDetails user = User.builder()
                 .username("user")
-                .password("password")
+                .password(passwordEncoder.encode("password"))
                 .roles("USER")
                 .build();
+
         return new InMemoryUserDetailsManager(user);
-    }
-    // @formatter:on
+      }  
 
 }

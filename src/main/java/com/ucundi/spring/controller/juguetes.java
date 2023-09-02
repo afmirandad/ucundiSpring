@@ -5,12 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class servicios {
+public class juguetes {
 
-    @GetMapping("/servicios")
+    @GetMapping("/juguetes")
     public String showIndex(Model model) {
-        model.addAttribute("title", "Servicios");
-        model.addAttribute("pathimage", "/images/omega.png");
+        model.addAttribute("title", "juguetes");
+        model.addAttribute("pathimage", "/images/instagram.png");
         return "index";
     }
 }
