@@ -4,12 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -20,6 +23,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
+                .headers(headers -> headers
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .preload(true)
+                                .maxAgeInSeconds(31536000)
+                        )
+                        .contentTypeOptions(HeadersConfigurer.ContentTypeOptionsConfig::disable)
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin
+                        )
+                        .xssProtection(xss -> xss
+                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+                        )
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("script-src 'self'")
+                        )
+                )
                 .authorizeHttpRequests((authorize) -> authorize
                         //Control access privileges
                         .requestMatchers("/camas").permitAll()
