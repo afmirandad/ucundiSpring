@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/comida").permitAll()
                         .requestMatchers("/ropa").permitAll()
                         .requestMatchers("/servicios","/juguetes").permitAll()
+                        .requestMatchers("/api/readCamas").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(withDefaults());
