@@ -12,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -20,7 +23,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
         // @formatter:off
         http
                 .headers(headers -> headers
@@ -35,21 +39,21 @@ public class SecurityConfig {
                         .xssProtection(xss -> xss
                                 .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
                         )
-                        .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("script-src 'self'")
-                        )
+                        //.contentSecurityPolicy(csp -> csp
+                        //        .policyDirectives("default-src 'self';")
+                        //)
                 )
                 .authorizeHttpRequests((authorize) -> authorize
                         //Control access privileges
-                        .requestMatchers("/camas").permitAll()
-                        .requestMatchers("/comida").permitAll()
-                        .requestMatchers("/ropa").permitAll()
-                        .requestMatchers("/servicios","/juguetes").permitAll()
-                        .requestMatchers("/api/readCamas").authenticated()
+                        .requestMatchers(new MvcRequestMatcher(introspector, "/camas")).permitAll()
+                        .requestMatchers(new MvcRequestMatcher(introspector,"/comida")).permitAll()
+                        .requestMatchers(new MvcRequestMatcher(introspector,"/ropa")).permitAll()
+                        .requestMatchers(new MvcRequestMatcher(introspector,"/servicios")).permitAll()
+                        .requestMatchers(new MvcRequestMatcher(introspector,"/api/readCamas")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(withDefaults());
-        // @formatter:on
         return http.build();
     }
 

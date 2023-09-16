@@ -7,7 +7,8 @@ import com.ucundi.spring.repositories.ropaRepositories;
 import com.ucundi.spring.repositories.serviciosRepositories;
 import com.ucundi.spring.repositories.juquetesRepositories;
 import org.springframework.boot.CommandLineRunner;
-
+import org.springframework.stereotype.Component;
+@Component
 public class PetStrapData implements CommandLineRunner {
 
     private final camasRepositories CamasRepository;
@@ -25,7 +26,7 @@ public class PetStrapData implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         camasEntity cama1 = new camasEntity("baseCama","primaveraAzul",230000);
         camasEntity cama2 = new camasEntity("queen","primaveraAzul",2300000);
