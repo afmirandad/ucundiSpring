@@ -8,7 +8,7 @@ import com.ucundi.spring.repositories.comidaRepositories;
 @Controller
 public class comida {
 
-    private comidaRepositories comidaR;
+    private final comidaRepositories comidaR;
 
     public comida(comidaRepositories comidaR) {
         this.comidaR = comidaR;
