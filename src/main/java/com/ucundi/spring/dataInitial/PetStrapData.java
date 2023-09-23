@@ -35,6 +35,7 @@ public class PetStrapData implements CommandLineRunner {
         comidaEntity comida2 = new comidaEntity("normal","catshow","petHealth",223000);
         comidaEntity comida3 = new comidaEntity("adultos","dogshow","petHealth",103000);
         juguetesEntity juguete1 = new juguetesEntity("pelota","chineseCats",25000);
+        juguetesEntity juguete2 = new juguetesEntity("correa","chineseDog",35000);
         ropaEntity ropa1 = new ropaEntity("buso","nikePets","M",45000);
         serviciosEntity servicio1 = new serviciosEntity("consulta","on-demand",150000);
 
@@ -45,10 +46,8 @@ public class PetStrapData implements CommandLineRunner {
         ComidaRepository.save(comida2);
         ComidaRepository.save(comida3);
         JuguetesRepository.save(juguete1);
+        JuguetesRepository.save(juguete2);
         RopaRepository.save(ropa1);
         ServiciosRepository.save(servicio1);
-
-        System.out.println("Prueba de concepto");
-        System.out.println("Cantidad de camas: "+CamasRepository.count());
     }
 }

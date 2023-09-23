@@ -1,7 +1,13 @@
 package com.ucundi.spring.repositories;
 
 import com.ucundi.spring.domain.camasEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface camasRepositories extends CrudRepository<camasEntity, Long> {
+import java.util.Optional;
+
+public interface camasRepositories extends JpaRepository<camasEntity, Long> {
+    Optional<camasEntity> findById(Long id);
+
+    void deleteById(Long id);
 }

@@ -26,6 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         // @formatter:off
         http
+                .csrf((csrf) -> csrf.disable())
                 .headers(headers -> headers
                         .httpStrictTransportSecurity(hsts -> hsts
                                 .includeSubDomains(true)
@@ -48,8 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(new MvcRequestMatcher(introspector,"/comida")).permitAll()
                         .requestMatchers(new MvcRequestMatcher(introspector,"/ropa")).permitAll()
                         .requestMatchers(new MvcRequestMatcher(introspector,"/servicios")).permitAll()
-                        .requestMatchers(new MvcRequestMatcher(introspector,"/api/readCamas")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(new MvcRequestMatcher(introspector,"/api/readCamas")).permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(withDefaults());

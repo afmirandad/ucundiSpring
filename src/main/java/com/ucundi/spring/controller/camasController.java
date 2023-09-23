@@ -1,45 +1,51 @@
 package com.ucundi.spring.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ucundi.spring.domain.camasEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.ucundi.spring.repositories.camasRepositories;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 public class camasController {
-
-    @GetMapping("/createCamas/{id}")
-    public String addCamas(@PathVariable("id") String id){
-        String regexforID = "[1-5 a-z]{1,5}";
-        if (id == null || !id.matches(regexforID))
-            throw new IllegalArgumentException();
-        return "Cama adicionada satisfactoriamente "+id;
+    private final camasRepositories camasR;
+    @Autowired
+    public camasController(camasRepositories camasR) {
+        this.camasR = camasR;
     }
 
-    @GetMapping("/createCamas/")
-    public String addCamas(){
-        return "Cama adicionada satisfactoriamente";
+    @PostMapping("/createCamas")
+    public ResponseEntity<camasEntity> agregarCama(@RequestBody camasEntity camaAdd) {
+        camasEntity camaAgregada = camasR.save(camaAdd);
+        return new ResponseEntity<>(camaAgregada, HttpStatus.CREATED);
     }
 
     @GetMapping("/readCamas")
     public String readCamas(){
-        return "Cama consultada satisfactoriamente";
+        return String.valueOf(camasR.findAll());
     }
 
     @GetMapping("/readCamas/{id}")
-    public String readCamas(@PathVariable("id") String identificador){
-        return "Cama consultada satisfactoriamente "+identificador;
+    public Optional<camasEntity> readCamas(@PathVariable("id") String identificador){
+        String regexforID = "[1-5 a-z]{1,5}";
+        if (identificador == null || !identificador.matches(regexforID))
+            throw new IllegalArgumentException();
+        return camasR.findById(Long.valueOf(identificador));
     }
 
-    @GetMapping("/updateCamas")
-    public String updateCamas(){
-        return "Cama actualizada satisfactoriamente";
+    @PutMapping("/updateCamas")
+    public ResponseEntity<camasEntity> updateCama(@RequestBody camasEntity camaUpd) {
+        camasEntity camaActualizada = camasR.save(camaUpd);
+        return new ResponseEntity<>(camaActualizada, HttpStatus.CREATED);
     }
 
-    @GetMapping("/deleteCamas")
-    public String deleteCamas(){
-        return "Cama eliminada satisfactoriamente";
+    @DeleteMapping("/deleteCamas/{id}")
+    public void eliminarUsuarioPorId(@PathVariable Long id) {
+        camasR.deleteById(id);
     }
 
 }
