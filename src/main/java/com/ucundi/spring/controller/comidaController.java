@@ -1,9 +1,13 @@
 package com.ucundi.spring.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ucundi.spring.domain.comidaEntity;
+import com.ucundi.spring.repositories.comidaRepositories;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * @author AndresMiranda
@@ -11,38 +15,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class comidaController {
-    
-    @GetMapping("/createComidas")
-    public String createComidas(){
-        return "Comida creada satisfactoriamente";
+    private final comidaRepositories comidaR;
+    @Autowired
+    public comidaController(comidaRepositories comidaR) {
+        this.comidaR = comidaR;
     }
-    @GetMapping("/createComidas/{id}")
-    public String createComidas(@PathVariable("id") String id){
-        return "Comida creada satisfactoriamente";
+
+    @PostMapping("/createComidas")
+    public ResponseEntity<comidaEntity> agregarcomida(@RequestBody comidaEntity comidaAdd) {
+        comidaEntity comidaAgregada = comidaR.save(comidaAdd);
+        return new ResponseEntity<>(comidaAgregada, HttpStatus.CREATED);
     }
+
     @GetMapping("/readComidas")
     public String readComidas(){
-        return "Comida consultada satisfactoriamente";
+        return String.valueOf(comidaR.findAll());
     }
+
     @GetMapping("/readComidas/{id}")
-    public String readComidas(@PathVariable("id") String id){
-        return "Comida creada satisfactoriamente";
+    public Optional<comidaEntity> readComidas(@PathVariable("id") String identificador){
+        String regexforID = "[1-5 a-z]{1,5}";
+        if (identificador == null || !identificador.matches(regexforID))
+            throw new IllegalArgumentException();
+        return comidaR.findById(Long.valueOf(identificador));
     }
-    @GetMapping("/updateComidas")
-    public String updateComidas(){
-        return "Comida actualizada satisfactoriamente";
+
+    @PutMapping("/updateComidas")
+    public ResponseEntity<comidaEntity> updatecomida(@RequestBody comidaEntity comidaUpd) {
+        comidaEntity comidaActualizada = comidaR.save(comidaUpd);
+        return new ResponseEntity<>(comidaActualizada, HttpStatus.CREATED);
     }
-    @GetMapping("/updateComidas/{id}")
-    public String updateComidas(@PathVariable("id") String id){
-        return "Comida actualizada satisfactoriamente";
+
+    @DeleteMapping("/deleteComidas/{id}")
+    public void eliminarUsuarioPorId(@PathVariable Long id) {
+        comidaR.deleteById(id);
     }
-    @GetMapping("/deleteComidas")
-    public String deleteComidas(){
-        return "Comida eliminada satisfactoriamente";
-    }
-    @GetMapping("/deleteComidas/{id}")
-    public String deleteComidas(@PathVariable("id") String id){
-        return "Comida eliminada satisfactoriamente";
-    }
-    
+
 }

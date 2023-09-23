@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface camasRepositories extends JpaRepository<camasEntity, Long> {
+public interface camasRepositories extends CrudRepository<camasEntity, Long> {
     Optional<camasEntity> findById(Long id);
 
     void deleteById(Long id);
