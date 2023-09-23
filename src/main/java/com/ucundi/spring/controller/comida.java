@@ -8,10 +8,15 @@ import com.ucundi.spring.repositories.comidaRepositories;
 @Controller
 public class comida {
 
-    private comidaRepositories comidaRepository;
+    private comidaRepositories comidaR;
+
+    public comida(comidaRepositories comidaR) {
+        this.comidaR = comidaR;
+    }
+
     @GetMapping("/comida")
     public String showIndex(Model model) {
-        model.addAttribute("title", "Comida");
+        model.addAttribute("title", comidaR.count());
         return "index";
     }
 }

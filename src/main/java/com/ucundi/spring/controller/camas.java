@@ -16,7 +16,7 @@ public class camas {
 
     @GetMapping("/camas")
     public String showIndex(Model model) {
-        model.addAttribute("title", "Cantidad camas: "+String.valueOf(camasR.count()));
+        model.addAttribute("title", "Cantidad camas: "+ camasR.count());
         return "index";
     }
 }
